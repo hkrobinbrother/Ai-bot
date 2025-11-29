@@ -1,6 +1,7 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
 import img1 from "../../public/Group 2.png";
 const Register = () => {
+  const navigate = useNavigate()
   const handleRegister = async (e) => {
     e.preventDefault();
 
@@ -19,6 +20,11 @@ const Register = () => {
       });
       // console.log("res status", res.status);
       const result = await res.json();
+      if(result.success){
+        navigate("/login")
+      }else{
+        alert(result.message)
+      }
       console.log(result)
       // console.log(data2);
     } catch (error) {

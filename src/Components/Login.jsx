@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
 import imgmonika from "../../public/Group 2.png"
 
 const Login = () => {
@@ -23,8 +23,10 @@ const Login = () => {
          })
          const data = await res.json()
          localStorage.setItem("token",data.access)
+        if(res.success){
 
-         navigate('/chatbot')
+          navigate('/chatbot')
+        }
 
          console.log(data)
 

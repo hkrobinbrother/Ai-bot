@@ -10,6 +10,7 @@ const Chatbot = () => {
   const handleClick = async (e) => {
     e.preventDefault();
     // user msg
+    setInput('')
     const setMsg = [...message, { sender: "user", text: input }];
     setMessage(setMsg);
 
@@ -34,7 +35,7 @@ const Chatbot = () => {
     const contentText = data.ai_message.content;
 
     setMessage([...setMsg, { sender: "bot", text: contentText }]);
-    setInput("");
+    
   };
   return (
     <div className=" bg-[#D8FFEA]">
