@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import img1 from "../../public/Group 2.png";
 const Register = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const handleRegister = async (e) => {
     e.preventDefault();
 
@@ -20,16 +20,15 @@ const Register = () => {
       });
       // console.log("res status", res.status);
       const result = await res.json();
-      if(result.success){
-        navigate("/login")
-      }else{
-        alert(result.message)
+      if (result.success) {
+        navigate("/login");
+      } else {
+        alert(result.message);
       }
-      console.log(result)
+      console.log(result);
       // console.log(data2);
     } catch (error) {
       console.error("network error", error);
-     
     }
   };
 
@@ -82,7 +81,12 @@ const Register = () => {
           className="input"
           placeholder="Password"
         />
-
+        <div className="flex gap-2">
+          <input type="checkbox" name="checkbox" />
+          <label className="label">
+            You agree to our friendly privacy policy.
+          </label>
+        </div>
         <button type="submit" className="btn bg-green-400 text-white mt-4">
           Create Account
         </button>
