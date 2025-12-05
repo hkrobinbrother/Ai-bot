@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Chatbot = () => {
   const [input, setInput] = useState("");
@@ -7,14 +7,26 @@ const Chatbot = () => {
 
   const navigate = useNavigate();
 
+  // local storage
+
+  useEffect(() => {
+    const userId = localStorage.getItem("userId");
+    if (!userId) return;
+
+    const saved = localStorage.getItem(`chatMessage_${userId}`);
+    setMessage(saved ? JSON.parse(saved) : []);
+  }, []);
+
   const handleClick = async (e) => {
     e.preventDefault();
+    if (!input) return;
     // user msg
-    setInput('')
+    setInput("");
     const setMsg = [...message, { sender: "user", text: input }];
     setMessage(setMsg);
 
     const token = localStorage.getItem("token");
+    console.log("access token", token);
     if (!token) {
       navigate("/login");
       return;
@@ -27,15 +39,24 @@ const Chatbot = () => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
+
       body: JSON.stringify({ content: input }),
     });
     const data = await res.json();
-    // bot
-    console.log(data.ai_message.content);
-    const contentText = data.ai_message.content;
+    console.log(res);
 
-    setMessage([...setMsg, { sender: "bot", text: contentText }]);
-    
+    // bot
+
+    const botReplay = { sender: "bot", text: data.ai_message.content };
+    const updatedMessage = [...setMsg, botReplay];
+    setMessage(updatedMessage);
+    const userId = localStorage.getItem("userId");
+    localStorage.setItem(
+      `chatMessage_${userId}`,
+      JSON.stringify(updatedMessage)
+    );
+    console.log("Saving chat for user:", userId);
+
   };
   return (
     <div className=" bg-[#D8FFEA]">
@@ -51,10 +72,9 @@ const Chatbot = () => {
                 msg.sender === "user" ? "text-right" : "text-left"
               }`}
             >
-              
               <span
                 className={`px-4 py-2 rounded-2xl inline-block max-w-[70%] ${
-                  message.sender
+                  msg.sender === "user"
                     ? " bg-gray-400 px-4 p-2"
                     : "bg-green-300 px-4 p-2  rounded-lg"
                 }`}

@@ -24,6 +24,7 @@ const Register = () => {
         navigate("/login");
       } else {
         alert(result.message);
+        navigate("/login");
       }
       console.log(result);
       // console.log(data2);
